@@ -1,30 +1,20 @@
-import math
 import requests
 
 attibutes = ('id', 'name', 'model', 'year', 'color', 'price', 'latitude', 'longitude')  
 
 def count_distance(lt1, lg1, lt2, lg2):
-    rad = 6372795
+    url = "https://geocodeapi.p.rapidapi.com/GetDistance"
 
-    lat1 = lt1*math.pi/180.
-    lat2 = lt2*math.pi/180.
-    long1 = lg1*math.pi/180.
-    long2 = lg2*math.pi/180.
+    querystring = {"lat1":lt1,"lon1":lg1,"lat2":lt2,"lon2":lg2}
 
-    cl1 = math.cos(lat1)
-    cl2 = math.cos(lat2)
-    sl1 = math.sin(lat1)
-    sl2 = math.sin(lat2)
-    delta = long2 - long1
-    cdelta = math.cos(delta)
-    sdelta = math.sin(delta)
+    headers = {
+        "X-RapidAPI-Key": "2349916976msh5c932a9ed114990p1728fbjsn0693f3435371",
+        "X-RapidAPI-Host": "geocodeapi.p.rapidapi.com"
+    }
 
-    y = math.sqrt(math.pow(cl2*sdelta, 2)+ math.pow(cl1*sl2 - sl1*cl2*cdelta, 2))
-    x = sl1*sl2 + cl1*cl2*cdelta
-    ad = math.atan2(y, x)
+    response = requests.get(url, headers=headers, params=querystring)
 
-    return ad*rad
-
+    return response.json()['Distance']
 
 class Vehicle:
     count = 0
